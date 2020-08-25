@@ -1,0 +1,9 @@
+{
+  "name": "tic-tac-toe_js",
+  "version": "0.0.0",
+  "description": "TicTacToe_Js",
+  "main": "app.js",
+  "author": {
+    "name": ""
+  }
+}

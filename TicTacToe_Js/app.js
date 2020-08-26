@@ -94,9 +94,10 @@ if (toss === head) {
                 if(block!==-1)
                 board[block] = computerVariable
                 if (blockMove === 0) {
-                    cell = getCellRandomValue()
-                    cell = cellChecking(cell)
-                    board[cell] = computerVariable
+                    move = centerMove()
+                    board[move] = computerVariable
+                    move = sideMove()
+                    board[move] = computerVariable
                 }
                 result = rowChecking(count, computerVariable)
             } else {
@@ -285,4 +286,22 @@ function cornerMove() {
         }
         leftLowCor += 2
     } return move
+}
+function centerMove() {
+    var center = 4
+    if (board[center] === "_") {
+        move = center
+        
+    }
+    return move
+}
+function sideMove() {
+    var cell = 1
+    while (cell <= 7) {
+        if (board[cell] === "_") {
+            move = cell
+            break
+        }cell=cell+2
+    }
+    return move
 }

@@ -80,18 +80,25 @@ if (toss === head) {
             count += 1;
             printValue()
             startGame = alternatePlay(startGame)
-            result = gameRule(count)
+            if (count >= 5) {
+                result = rowChecking(count, computerVariable)
+            }
             if (result === 1) {
                 break
             }
         } else {
-            cell = getCellRandomValue()
-            cell = cellChecking(cell)
-            board[cell] = computerVariable
+            if (count >= 3) {
+                block = rowBlock(computerVariable)
+                board[block] = computerVariable
+                result = rowChecking(count, computerVariable)
+            } else {
+                cell = getCellRandomValue()
+                cell = cellChecking(cell)
+                board[cell] = computerVariable
+            }
             count += 1
             printValue()
             startGame = alternatePlay(startGame)
-            result = gameRule(count)
             if (result === 1) {
                 break
             }
@@ -118,31 +125,34 @@ function gameRule(count) {
     }
     return result
 }
-function rowChecking() {
+function rowChecking(count) {
     let rowValues = 0
 
     while (rowValues < 9) {
         let firstValue = rowValues
         let secondValue = firstValue + 1
         let thirdValue = secondValue + 1
-        if (board[firstValue] === board[secondValue] && board[secondValue] === board[thirdValue]) {
+        if (board[firstValue] === board[secondValue] && board[secondValue] === board[thirdValue] && board[firstValue] !== "_" && board[secondValue] !== "_" && board[thirdValue] !== "_") {
             result = 1
             break;
         } else {
             result = 0
         }
+        if (thirdValue === 8 && result === 0) {
+            reult = columnChecking(count)
+        }
         rowValues = thirdValue + 1
     }
     return result
 }
-function columnChecking() {
+function columnChecking(counts) {
     var columnValues = 0
     var count = 1
     while (count < 9) {
         var firstValue = columnValues
         var secondValue = firstValue + 3
         var thirdValue = secondValue + 3
-        if (board[firstValue] === board[secondValue] && board[secondValue] === board[thirdValue]) {
+        if (board[firstValue] === board[secondValue] && board[secondValue] === board[thirdValue] && board[firstValue] !== "_" && board[secondValue] !== "_" && board[thirdValue] !== "_") {
             result = 1
             count += 3
             break;
@@ -150,14 +160,17 @@ function columnChecking() {
             count += 3
             result = 0
         }
+        if (thirdValue === 8 && result === 0) {
+            result = diagonalChecking(counts)
+        }
         columnValues = thirdValue - 5
     }
     return result
 }
 function diagonalChecking(count) {
-    if (board[0] === board[4] && board[4] === board[8]) {
+    if (board[0] === board[4] && board[4] === board[8] && board[0] !== "_" && board[4] !== "_" && board[8] !== "_") {
         result = 1
-    } else if (board[2] === board[4] && board[4] === board[6]) {
+    } else if (board[2] === board[4] && board[4] === board[6] && board[2] !== "_" && board[4] !== "_" && board[6] !== "_") {
         result = 1
     } else {
         if (count === 8) {
@@ -165,5 +178,73 @@ function diagonalChecking(count) {
         }
     }
     return result
+}
+function diagonalBlock() {
+    if (board[0] === board[4] && board[0] !== "_" && board[4] !== "_" && board[8] === "_") {
+        block = 8
+    } else if (board[4] === board[8] && board[0] === "_" && board[4] !== "_" && board[8] !== "_") {
+        block = 0
+    } else if (board[0] === board[8] && board[0] !== "_" && board[4] === "_" && board[8] !== "_") {
+        block = 4
+    } else if (board[4] === board[2] && board[6] === "_" && board[2] !== "_" && board[4] !== "_") {
+        block = 6
+    } else if (board[4] === board[6] && board[2] === "_" && board[4] !== "_" && board[6] !== "_") {
+        block = 2
+    } else if (board[2] === board[6] && board[2] === "_" && board[4] === "_" && board[6] !== "_") {
+        block = 4
+    }
+    return block
+}
+    
+function columnBlock(computerVariable) {
+    var columnValues = 0
+    var count = 1
+    while (count < 9) {
+        var firstValue = columnValues
+        var secondValue = firstValue + 3
+        var thirdValue = secondValue + 3
+        if (board[firstValue] === board[secondValue]  && board[firstValue] !== "_" && board[secondValue] !== "_" && board[thirdValue] === "_") {
+            block = thirdValue
+            count += 3
+            break;
+        } else if (board[secondValue] === board[thirdValue] && board[firstValue] === "_" && board[secondValue] !== "_" && board[thirdValue] !== "_") {
+            block = firstValue
+            count += 3
+            break
+        } else if (board[firstValue] === board[thirdValue] && board[firstValue] !== "_" && board[secondValue] === "_" && board[thirdValue] !== "_") {
+            block = secondValue
+            count += 3
+            break
+        }
+        if (thirdValue === 8) {
+            block = diagonalBlock(computerVariable)
+        }
+        columnValues = thirdValue - 5
+    }
+    return block
+}
+function rowBlock(computerVariable) {
+    var rowValues = 0
+    var count = 1
+    while (rowValues < 9) {
+        var firstValue = rowValues
+        var secondValue = firstValue + 1
+        var thirdValue = secondValue + 1
+        if (board[firstValue] === board[secondValue] && board[firstValue] !== "_" && board[secondValue] !== "_" && board[thirdValue] === "_") {
+            block = thirdValue
+            break;
+        } else if (board[secondValue] === board[thirdValue] && board[firstValue] === "_" && board[secondValue] !== "_" && board[thirdValue] !== "_") {
+            block = firstValue
+            break;
+        } else if (board[firstValue] === board[thirdValue] && board[firstValue] !== "_" && board[secondValue] === "_" && board[thirdValue] !== "_") {
+            block = secondValue
+            break
+        }
+        if (thirdValue === 8) {
+            block = columnBlock(computerVariable)
+        }
+        rowValues = thirdValue + 1
+    }
+    return block
 }
 

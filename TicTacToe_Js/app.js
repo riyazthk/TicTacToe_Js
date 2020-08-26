@@ -4,67 +4,22 @@ var board = ["_", "_", "_", "_", "_", "_", "_", "_", "_"]
 var head = 1
 var userVariable
 var computerVariable
-var userStarts = 1
-var computerStarts = 2
 var blockMove=0
 var count = 0
 var startGame
 var result
 
-
-console.log(toss)
-function calculateToss() {
-    return Math.floor(Math.random() * 2) + 1;
-}
-function calculateComputerVariable() {
-    if (userVariable === "x") {
-        computerVariable = "o"
-    } else {
-        computerVariable="x"
-    }
-}
-function alternatePlay(startGame) {
-    if (startGame === 1) {
-        startGame = 2
-    } else {
-        startGame = 1
-    }
-    return startGame
-}
-function getCellRandomValue() {
-    return Math.floor(Math.random() * 9) ;
-
-}
-function cellChecking(cell) {
-    while (board[cell] !== "_") {
-        if (board[cell] === "_") {
-            break
-        } else {
-            cell = getCellRandomValue()
-        }
-    }
-    return cell
-}
-function printValue() {
-    console.log(board[0] + " | " + board[1] + " | " + board[2])
-    console.log("----------------------------------------------")
-    console.log(board[3] + " | " + board[4] + " | " + board[5])
-    console.log("----------------------------------------------")
-    console.log(board[6] + " | " + board[7] + " | " + board[8])
-
-}
-
-var toss = calculateToss()
+var toss = gameLogicPath.calculateToss()
 if (toss === head) {
     console.log("user won a toss")
     console.log("choose a letter x or o")
     userVariable = readlineSync.question("enter a letter")
     startGame=1
-    calculateComputerVariable()
+    gameLogicPath.calculateComputerVariable()
 } else {
     console.log("computer won a toss")
     startGame=2
-    var result = calculateToss()
+    var result = gameLogicPath.calculateToss()
     if (result == 1) {
         computerVariable = "o"
         userVariable="x"
@@ -80,7 +35,7 @@ if (toss === head) {
             board[cell] = userVariable
             count += 1;
             printValue()
-            startGame = alternatePlay(startGame)
+            startGame = gameLogicPath.alternatePlay(startGame)
             if (count >= 5) {
                 result = rowChecking(count, computerVariable)
             }
@@ -106,7 +61,7 @@ if (toss === head) {
             }
             count += 1
             printValue()
-            startGame = alternatePlay(startGame)
+            startGame = gameLogicPath.alternatePlay(startGame)
             if (result === 1) {
                 break
             }
@@ -117,22 +72,16 @@ if (result === 1) {
 } else {
     console.log("match tie")
 }
-/*var boardPath = require('./app.js')
-*/
-function gameRule(count) {
-    if (count >= 5) {
-        result = rowChecking()
-        if (result === "1") {
-            return;
-        }
-        result = columnChecking()
-        if (result === "1") {
-            return;
-        }
-        result = diagonalChecking(count)
-    }
-    return result
+
+function printValue() {
+    console.log(board[0] + " | " + board[1] + " | " + board[2])
+    console.log("----------------------------------------------")
+    console.log(board[3] + " | " + board[4] + " | " + board[5])
+    console.log("----------------------------------------------")
+    console.log(board[6] + " | " + board[7] + " | " + board[8])
+
 }
+
 function rowChecking(count) {
     let rowValues = 0
 
@@ -247,7 +196,6 @@ function columnBlock(computerVariable) {
 }
 function rowBlock(computerVariable) {
     var rowValues = 0
-    var count = 1
     while (rowValues < 9) {
         var firstValue = rowValues
         var secondValue = firstValue + 1

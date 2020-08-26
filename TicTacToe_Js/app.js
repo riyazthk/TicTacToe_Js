@@ -6,6 +6,7 @@ var userVariable
 var computerVariable
 var userStarts = 1
 var computerStarts = 2
+var blockMove=0
 var count = 0
 var startGame
 var result
@@ -89,12 +90,18 @@ if (toss === head) {
         } else {
             if (count >= 3) {
                 block = rowBlock(computerVariable)
+                
+                if(block!==-1)
                 board[block] = computerVariable
+                if (blockMove === 0) {
+                    cell = getCellRandomValue()
+                    cell = cellChecking(cell)
+                    board[cell] = computerVariable
+                }
                 result = rowChecking(count, computerVariable)
             } else {
-                cell = getCellRandomValue()
-                cell = cellChecking(cell)
-                board[cell] = computerVariable
+                move = cornerMove()
+                board[move] = computerVariable
             }
             count += 1
             printValue()
@@ -182,16 +189,26 @@ function diagonalChecking(count) {
 function diagonalBlock() {
     if (board[0] === board[4] && board[0] !== "_" && board[4] !== "_" && board[8] === "_") {
         block = 8
+        blockMove=1
     } else if (board[4] === board[8] && board[0] === "_" && board[4] !== "_" && board[8] !== "_") {
         block = 0
+        blockMove = 1
     } else if (board[0] === board[8] && board[0] !== "_" && board[4] === "_" && board[8] !== "_") {
         block = 4
+        blockMove = 1
     } else if (board[4] === board[2] && board[6] === "_" && board[2] !== "_" && board[4] !== "_") {
         block = 6
+        blockMove = 1
     } else if (board[4] === board[6] && board[2] === "_" && board[4] !== "_" && board[6] !== "_") {
         block = 2
+        blockMove = 1
     } else if (board[2] === board[6] && board[2] === "_" && board[4] === "_" && board[6] !== "_") {
         block = 4
+        blockMove = 1
+    }
+    
+    if (blockMove === 0) {
+        block=-1
     }
     return block
 }
@@ -206,18 +223,22 @@ function columnBlock(computerVariable) {
         if (board[firstValue] === board[secondValue]  && board[firstValue] !== "_" && board[secondValue] !== "_" && board[thirdValue] === "_") {
             block = thirdValue
             count += 3
+            blockMove = 1
             break;
         } else if (board[secondValue] === board[thirdValue] && board[firstValue] === "_" && board[secondValue] !== "_" && board[thirdValue] !== "_") {
             block = firstValue
             count += 3
+            blockMove = 1
             break
         } else if (board[firstValue] === board[thirdValue] && board[firstValue] !== "_" && board[secondValue] === "_" && board[thirdValue] !== "_") {
             block = secondValue
             count += 3
+            blockMove = 1
             break
         }
         if (thirdValue === 8) {
             block = diagonalBlock(computerVariable)
+            break
         }
         columnValues = thirdValue - 5
     }
@@ -232,12 +253,15 @@ function rowBlock(computerVariable) {
         var thirdValue = secondValue + 1
         if (board[firstValue] === board[secondValue] && board[firstValue] !== "_" && board[secondValue] !== "_" && board[thirdValue] === "_") {
             block = thirdValue
+            blockMove = 1
             break;
         } else if (board[secondValue] === board[thirdValue] && board[firstValue] === "_" && board[secondValue] !== "_" && board[thirdValue] !== "_") {
             block = firstValue
+            blockMove = 1
             break;
         } else if (board[firstValue] === board[thirdValue] && board[firstValue] !== "_" && board[secondValue] === "_" && board[thirdValue] !== "_") {
             block = secondValue
+            blockMove = 1
             break
         }
         if (thirdValue === 8) {
@@ -247,4 +271,18 @@ function rowBlock(computerVariable) {
     }
     return block
 }
-
+function cornerMove() {
+    var leftUpCor = 0
+    var leftLowCor = 6
+    while (leftUpCor <= 3 || leftLowCor <= 8) {
+        if (board[leftUpCor] === "_") {
+            move = leftUpCor
+            break
+        } leftUpCor = leftUpCor + 2
+        if (board[leftLowCor] === "-") {
+            move = leftLowCor
+            break
+        }
+        leftLowCor += 2
+    } return move
+}

@@ -4,6 +4,7 @@ var board = ["_", "_", "_", "_", "_", "_", "_", "_", "_"]
 var head = 1
 var userVariable
 var computerVariable
+var centerVisit=0
 var blockMove=0
 var count = 0
 var startGame
@@ -15,12 +16,12 @@ if (toss === head) {
     console.log("choose a letter x or o")
     userVariable = readlineSync.question("enter a letter")
     startGame=1
-    gameLogicPath.calculateComputerVariable()
+    computerVariable=gameLogicPath.calculateComputerVariable()
 } else {
     console.log("computer won a toss")
     startGame=2
-    var result = gameLogicPath.calculateToss()
-    if (result == 1) {
+    var getComputerVariable = gameLogicPath.calculateToss()
+    if (getComputerVariable == 1) {
         computerVariable = "o"
         userVariable="x"
     } else {
@@ -49,10 +50,13 @@ if (toss === head) {
                 if(block!==-1)
                 board[block] = computerVariable
                 if (blockMove === 0) {
-                    move = centerMove()
-                    board[move] = computerVariable
-                    move = sideMove()
-                    board[move] = computerVariable
+                    if (centerVisit === 0) {
+                        move = centerMove()
+                        board[move] = computerVariable
+                    } else {
+                        move = sideMove()
+                        board[move] = computerVariable
+                    }
                 }
                 result = rowChecking(count, computerVariable)
             } else {
@@ -239,7 +243,7 @@ function centerMove() {
     var center = 4
     if (board[center] === "_") {
         move = center
-        
+        centerVisit=1
     }
     return move
 }
@@ -253,3 +257,4 @@ function sideMove() {
     }
     return move
 }
+module.exports = { userVariable };

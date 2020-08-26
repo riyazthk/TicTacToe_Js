@@ -1,12 +1,14 @@
+appPath=require('./app.js')
 function calculateToss() {
     return Math.floor(Math.random() * 2) + 1;
 }
 function calculateComputerVariable() {
-    if (userVariable === "x") {
+    if (appPath.userVariable === "x") {
         computerVariable = "o"
     } else {
         computerVariable = "x"
     }
+    return computerVariable
 }
 function alternatePlay(startGame) {
     if (startGame === 1) {

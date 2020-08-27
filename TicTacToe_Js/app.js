@@ -32,8 +32,18 @@ if (toss === head) {
 }
     while (count < board.length) {
         if (startGame === 1) {
-            var cell = readlineSync.question("enter a cell number")
-            board[cell] = userVariable
+            while (startGame === 1) {
+                let regex = /^[0-8]{1}$/                
+                let cell = readlineSync.question("enter a cell number")
+               console.log(regex.test(cell))
+                if (regex.test(cell)) {
+                    board[cell] = userVariable
+                    break
+                } else {
+                    console.log("cell number must between 0 to 9")
+                }
+            }
+        
             count += 1;
             printValue()
             startGame = gameLogicPath.alternatePlay(startGame)
